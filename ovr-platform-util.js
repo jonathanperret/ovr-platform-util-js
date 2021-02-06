@@ -1,4 +1,4 @@
-const __js = function () {
+(function () {
     const fs = require('fs');
     if (!fs.existsSync('ovr-platform-util.exe')) {
         require('child_process').execFileSync('curl', ['-L', '-o', 'ovr-platform-util.exe', 'https://www.oculus.com/download_app/?id=1076686279105243']);
@@ -7,8 +7,9 @@ const __js = function () {
     const startIndex = buf.indexOf('var __BUNDLE_START_TIME__');
     const realStartIndex = buf.indexOf('\n', startIndex) + 1;
     const endIndex = buf.indexOf(0, realStartIndex);
-    return buf.slice(realStartIndex, endIndex).toString('utf-8');
-}();
+    const bundle = buf.slice(realStartIndex, endIndex).toString('utf-8');
+    fs.writeFileSync('ovr-platform-util-bundle.js', bundle);
+})();
 
 __processBinding = process.binding;
 process.binding = (name) => {
@@ -31,4 +32,5 @@ process.binding = (name) => {
     }
 };
 global.require = require;
-eval(__js);
+
+require('./ovr-platform-util-bundle');
