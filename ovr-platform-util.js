@@ -32,5 +32,6 @@ process.binding = (name) => {
     }
 };
 global.require = require;
+global.os = undefined;
 
 require('./ovr-platform-util-bundle');
